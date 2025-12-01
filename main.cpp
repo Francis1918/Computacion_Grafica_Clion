@@ -113,7 +113,7 @@ int main() {
             C2_Exercise_9_TU_Task5();//textura con parametros avanzados
             break;
         case 20:
-            B2T1();//texturas
+            B2T1();//texturas del codigo ya actualizado (Deber)
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
