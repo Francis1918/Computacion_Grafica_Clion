@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\build\CMakeFiles\14e8479f801ff9cefc37d89ec4a1e8ce\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{93097039-FBB3-329C-AAC1-80B4021AEDB3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

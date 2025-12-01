@@ -1,0 +1,9 @@
+# Configuración de inspecciones para CLion
+# Este archivo ayuda a suprimir advertencias de bibliotecas externas
+
+# Patrones de exclusión para análisis de código
+external/**
+cmake-build-debug/**
+build/**
+.git/**
+

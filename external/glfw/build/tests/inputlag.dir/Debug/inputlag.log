@@ -1,0 +1,41 @@
+﻿  Building Custom Rule C:/Users/bravo/Downloads/OPENGL/glfw-3.4/glfw-3.4/tests/CMakeLists.txt
+  inputlag.c
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(3433,37): warning C5287: los operandos son diferentes tipos de enumeración 'nk_edit_types' y 'nk_edit_flags'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(5265,47): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_set' y 'nk_panel_type'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(5266,42): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_set' y 'nk_panel_type'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(5359,46): warning C5287: los operandos son diferentes tipos de enumeración 'nk_window_flags' y 'nk_panel_flags'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(15599,18): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_type' y 'nk_panel_set'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(15604,18): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_type' y 'nk_panel_set'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(16822,5): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_type' y 'nk_panel_set'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(16916,5): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_type' y 'nk_panel_set'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(16989,5): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_type' y 'nk_panel_set'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(17252,5): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_type' y 'nk_panel_set'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(23770,44): warning C5287: los operandos son diferentes tipos de enumeración 'nk_edit_types' y 'nk_edit_flags'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\deps\nuklear.h(25334,44): warning C5287: los operandos son diferentes tipos de enumeración 'nk_panel_type' y 'nk_panel_set'; usar una conversión explícita para silenciar esta advertencia
+  (compilando archivo de origen "../../tests/inputlag.c")
+  
+  getopt.c
+  Generando código...
+  inputlag.vcxproj -> C:\Users\bravo\Downloads\OPENGL\glfw-3.4\glfw-3.4\build\tests\Debug\inputlag.exe
