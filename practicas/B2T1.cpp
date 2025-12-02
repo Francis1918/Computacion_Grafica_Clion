@@ -39,35 +39,36 @@ void B2T1()
         return;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);//ajusta el tamaño de la ventana
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
+    {//carga la funciones de la libreria glad
         std::cout << "Failed to initialize GLAD" << std::endl;
         return;
     }
 
     // Cargar shaders con validación
     Shader ourShader("../practicas/shaders/shader_B2T1.vs", "../practicas/shaders/shader_B2T1.fs");
-
+    //construye el objeto shader con las rutas de los archivos de shader vs y fs
 
     // --- CARGAR TEXTURAS CON SOPORTE PARA CANAL ALFA ---
     glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);// crean y vinculan el objeto de textura
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+    //configuran el wrapping junto con los filtros repeat y linear respectivamente
     int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(true);//voltea la imagen al cargarla en las coordenadad UV
     unsigned char *data = stbi_load("../practicas/textures/BlueColor.PNG", &width, &height, &nrChannels, 0);
+    //obtiene las rutas de las texturas y las carga en memoria
     if (data)
     {
         GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }
+    } //carga la texturas si son validas
     else
     {
         std::cout << "Failed to load texture 1" << std::endl;
@@ -93,7 +94,7 @@ void B2T1()
         std::cout << "Failed to load texture 2" << std::endl;
     }
     stbi_image_free(data);
-
+    //coodenadas de la figura compuesta por dos grupos de triangulos para las texturas
     // --- Definición de Vértices con coordenadas UV estándar ---
     float vertices[] = {
         // x, y, z    // u, v    // groupID
@@ -143,7 +144,7 @@ void B2T1()
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+    //sube todos los vetices a la GPU
     // Posición
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -153,17 +154,18 @@ void B2T1()
     // Grupo
     glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(5 * sizeof(float)));
     glEnableVertexAttribArray(2);
-
+    // Configura los atributos de los vértices: posición, coordenadas UV y grupoID
     // --- Configuración de texturas (solo una vez para optimizar CPU/GPU) ---
-    ourShader.use();
+    ourShader.use();//activa el programa shader
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2);
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
-
+    //decirle al shader que unidades de textura usar
     // --- Bucle de renderizado ---
+    //imprimir en consola la guia de uso de programa (controles)
     std::cout << "\n=== CONTROLES ===" << std::endl;
     std::cout << "J/L: Mover figura horizontalmente" << std::endl;
     std::cout << "A/D: Intercambiar texturas" << std::endl;
@@ -172,20 +174,20 @@ void B2T1()
 
     while (!glfwWindowShouldClose(window))
     {
-        processInput(window);
+        processInput(window);//procesa las entradas que recibe por el teclado
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);//limpian la pantalla con el color especificado
 
         // Enviar uniforms a GPU (optimizado: solo valores que cambian)
-        ourShader.setVec2("positionOffset", posX, posY);
-        ourShader.setBool("texSwap", texSwap);
+        ourShader.setVec2("positionOffset", posX, posY);//reset
+        ourShader.setBool("texSwap", texSwap);//decide que shade usar
 
-        glBindVertexArray(VAO);
+        glBindVertexArray(VAO);//dibuja los 27 vertices de cada triangulo
         glDrawArrays(GL_TRIANGLES, 0, 27);
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwPollEvents();//muestran el frame y procesan eventos
     }
 
     glDeleteVertexArrays(1, &VAO);
@@ -193,14 +195,15 @@ void B2T1()
     glDeleteTextures(1, &texture1);
     glDeleteTextures(1, &texture2);
     glfwTerminate();
+    //libera los recursos de la GPU y cierra la ventana
 }
 
 static void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+        glfwSetWindowShouldClose(window, true);// usa la tecla esc para cerrar la ventana
 
-    // Control de velocidad basado en tiempo
+    // Control de velocidad basado en tiempo presionando las teclas
     static float lastFrame = 0.0f;
     float currentFrame = glfwGetTime();
     float deltaTime = currentFrame - lastFrame;
