@@ -27,6 +27,10 @@ void C2_Exercise_9_TU_Task3();
 void C2_Exercise_9_TU_Task4();
 void C2_Exercise_9_TU_Task5();
 void B2T1();
+void C2_Exercise_10_T2D_Task1();
+void C2_Exercise_10_T2D_Task2();
+void C2_Exercise_10_T2D_Task3();
+void C2_Exercise_10_T2D_Task5();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
@@ -51,6 +55,10 @@ int main() {
     std::cout << "18. C2_Exercise_9_TU_Task4 - Textura con diferentes parametros de wrapping y filtering" << std::endl;
     std::cout << "19. C2_Exercise_9_TU_Task5 - Textura con parametros avanzados" << std::endl;
     std::cout << "20. B2T1 - Texturas" << std::endl;
+    std::cout << "21. C2_Exercise_10_T2D_Task1 - Transformaciones 2D" << std::endl;
+    std::cout << "22. C2_Exercise_10_T2D_Task2 - Transformaciones 2D con matriz" << std::endl;
+    std::cout << "23. C2_Exercise_10_T2D_Task3 - Transformaciones 2D con animacion" << std::endl;
+    std::cout << "24. C2_Exercise_10_T2D_Task5 - Transformaciones 2D con parametros avanzados" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -114,6 +122,18 @@ int main() {
             break;
         case 20:
             B2T1();//texturas del codigo ya actualizado (Deber)
+            break;
+        case 21:
+            C2_Exercise_10_T2D_Task1();//transformaciones 2D
+            break;
+        case 22:
+            C2_Exercise_10_T2D_Task2();//transformaciones 2D con matriz
+            break;
+        case 23:
+            C2_Exercise_10_T2D_Task3();//transformaciones 2D con animacion
+            break;
+        case 24:
+            C2_Exercise_10_T2D_Task5();//transformaciones 2D con parametros avanzados
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
