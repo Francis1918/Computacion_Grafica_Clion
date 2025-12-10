@@ -32,6 +32,10 @@ void C2_Exercise_10_T2D_Task2();
 void C2_Exercise_10_T2D_Task3();
 void C2_Exercise_10_T2D_Task4();
 void C2_Exercise_10_T2D_Task5();
+void C2_Exercise_11_T3D_Task1();
+void C2_Exercise_11_T3D_Task2();
+void C2_Exercise_11_T3D_Task3();
+void C2_Exercise_11_T3D_Task4();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
@@ -61,6 +65,10 @@ int main() {
     std::cout << "23. C2_Exercise_10_T2D_Task3 - Transformaciones 2D con animacion" << std::endl;
     std::cout << "24. C2_Exercise_10_T2D_Task4 - Transformaciones 2D con animacion 2" << std::endl;
     std::cout << "25. C2_Exercise_10_T2D_Task5 - Transformaciones 2D con parametros avanzados" << std::endl;
+    std::cout << "26. C2_Exercise_11_T3D_Task1 - Transformaciones 3D con texturas" << std::endl;
+    std::cout << "27. C2_Exercise_11_T3D_Task2 - Transformaciones 3D con texturas y animacion" << std::endl;
+    std::cout << "28. C2_Exercise_11_T3D_Task3 - Transformaciones 3D con texturas y animacion avanzada" << std::endl;
+    std::cout << "29. C2_Exercise_11_T3D_Task4 - Transformaciones 3D con texturas y animacion avanzada con profundidad" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -139,6 +147,18 @@ int main() {
             break;
         case 25:
             C2_Exercise_10_T2D_Task5();//transformaciones 2D con parametros avanzados
+            break;
+        case 26:
+            C2_Exercise_11_T3D_Task1();//transformaciones 3D con texturas
+            break;
+        case 27:
+            C2_Exercise_11_T3D_Task2();//transformaciones 3D con texturas y animacion
+            break;
+        case 28:
+            C2_Exercise_11_T3D_Task3();//transformaciones 3D con texturas y animacion avanzada
+            break;
+        case 29:
+            C2_Exercise_11_T3D_Task4();//transformaciones 3D con texturas y animacion avanzada con profundidad
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
