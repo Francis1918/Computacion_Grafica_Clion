@@ -43,5 +43,6 @@ add_executable(Computacion_Grafica_Clion main.cpp
         practicas/C2_Exercise_10_T2D_Task1.cpp
         practicas/C2_Exercise_10_T2D_Task2.cpp
         practicas/C2_Exercise_10_T2D_Task3.cpp
-        practicas/C2_Exercise_10_T2D_Task5.cpp)
+        practicas/C2_Exercise_10_T2D_Task5.cpp
+        practicas/C2_Exercise_10_T2D_Task4.cpp)
 target_link_libraries(Computacion_Grafica_Clion glfw opengl32)

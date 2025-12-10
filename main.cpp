@@ -30,6 +30,7 @@ void B2T1();
 void C2_Exercise_10_T2D_Task1();
 void C2_Exercise_10_T2D_Task2();
 void C2_Exercise_10_T2D_Task3();
+void C2_Exercise_10_T2D_Task4();
 void C2_Exercise_10_T2D_Task5();
 int main() {
     int opcion;
@@ -58,7 +59,8 @@ int main() {
     std::cout << "21. C2_Exercise_10_T2D_Task1 - Transformaciones 2D" << std::endl;
     std::cout << "22. C2_Exercise_10_T2D_Task2 - Transformaciones 2D con matriz" << std::endl;
     std::cout << "23. C2_Exercise_10_T2D_Task3 - Transformaciones 2D con animacion" << std::endl;
-    std::cout << "24. C2_Exercise_10_T2D_Task5 - Transformaciones 2D con parametros avanzados" << std::endl;
+    std::cout << "24. C2_Exercise_10_T2D_Task4 - Transformaciones 2D con animacion 2" << std::endl;
+    std::cout << "25. C2_Exercise_10_T2D_Task5 - Transformaciones 2D con parametros avanzados" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -133,6 +135,9 @@ int main() {
             C2_Exercise_10_T2D_Task3();//transformaciones 2D con animacion
             break;
         case 24:
+            C2_Exercise_10_T2D_Task4();//transformaciones 2D con animacion 2
+            break;
+        case 25:
             C2_Exercise_10_T2D_Task5();//transformaciones 2D con parametros avanzados
             break;
         case 0:
