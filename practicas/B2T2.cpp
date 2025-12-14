@@ -51,7 +51,7 @@ void B2T1()
     }
 
     // Cargar shaders con validación
-    Shader ourShader("../practicas/shaders/shader_B2T1.vs", "../practicas/shaders/shader_B2T1.fs");
+    Shader ourShader("../practicas/shaders/shader_B2T2.vs", "../practicas/shaders/shader_B2T2.fs");
     //construye el objeto shader con las rutas de los archivos de shader vs y fs
 
     // --- CARGAR TEXTURAS CON SOPORTE PARA CANAL ALFA ---
