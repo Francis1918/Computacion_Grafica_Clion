@@ -70,7 +70,7 @@ int main() {
     std::cout << "27. C2_Exercise_11_T3D_Task2 - Transformaciones 3D con texturas y animacion" << std::endl;
     std::cout << "28. C2_Exercise_11_T3D_Task3 - Transformaciones 3D con texturas y animacion avanzada" << std::endl;
     std::cout << "29. C2_Exercise_11_T3D_Task4 - Transformaciones 3D con texturas y animacion avanzada con profundidad" << std::endl;
-    std::cout << "20. B2T2 - Texturas con multiples atributos" << std::endl;
+    std::cout << "30. B2T2 - Texturas con multiples atributos" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
