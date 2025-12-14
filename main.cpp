@@ -36,6 +36,7 @@ void C2_Exercise_11_T3D_Task1();
 void C2_Exercise_11_T3D_Task2();
 void C2_Exercise_11_T3D_Task3();
 void C2_Exercise_11_T3D_Task4();
+void B2T2();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
