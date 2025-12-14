@@ -22,7 +22,7 @@ static float posY = 0.0f;
 static unsigned int texture1, texture2;
 static bool texSwap = false;
 
-void B2T1()
+void B2T2()
 {
     // --- Inicialización ---
     glfwInit();
