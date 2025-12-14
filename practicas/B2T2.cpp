@@ -5,6 +5,10 @@
 #include <GLFW/glfw3.h>
 #include <shader_s.h>
 #include <stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include <iostream>
 #include <cmath>
 
@@ -21,6 +25,20 @@ static float posX = 0.0f;
 static float posY = 0.0f;
 static unsigned int texture1, texture2;
 static bool texSwap = false;
+
+// Posiciones para múltiples instancias de la figura (efecto screensaver)
+glm::vec3 objectPositions[] = {
+    glm::vec3( 0.0f,  0.0f,  0.0f),
+    glm::vec3( 2.0f,  5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3( 2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3( 1.3f, -2.0f, -2.5f),
+    glm::vec3( 1.5f,  2.0f, -2.5f),
+    glm::vec3( 1.5f,  0.2f, -1.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
+};
 
 void B2T2()
 {
@@ -49,6 +67,9 @@ void B2T2()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return;
     }
+
+    // Configurar estado global de OpenGL
+    glEnable(GL_DEPTH_TEST);
 
     // Cargar shaders con validación
     Shader ourShader("../practicas/shaders/shader_B2T2.vs", "../practicas/shaders/shader_B2T2.fs");
@@ -170,9 +191,9 @@ void B2T2()
     // --- Bucle de renderizado ---
     //imprimir en consola la guia de uso de programa (controles)
     std::cout << "\n=== CONTROLES ===" << std::endl;
-    std::cout << "J/L: Mover figura horizontalmente" << std::endl;
-    std::cout << "A/D: Intercambiar texturas" << std::endl;
-    std::cout << "R: Resetear posicion" << std::endl;
+    std::cout << "W/A/S/D: Desplazar figuras" << std::endl;
+    std::cout << "R/L: Intercambiar texturas" << std::endl;
+    std::cout << "ESPACIO: Resetear posicion" << std::endl;
     std::cout << "ESC: Salir\n" << std::endl;
 
     while (!glfwWindowShouldClose(window))
@@ -180,14 +201,46 @@ void B2T2()
         processInput(window);//procesa las entradas que recibe por el teclado
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);//limpian la pantalla con el color especificado
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpiar también buffer de profundidad
 
-        // Enviar uniforms a GPU (optimizado: solo valores que cambian)
-        ourShader.setVec2("positionOffset", posX, posY);//reset
-        ourShader.setBool("texSwap", texSwap);//decide que shade usar
+        ourShader.use();
+        ourShader.setBool("texSwap", texSwap);
 
-        glBindVertexArray(VAO);//dibuja los 27 vertices de cada triangulo
-        glDrawArrays(GL_TRIANGLES, 0, 27);
+        // --- Transformaciones de Cámara (View) y Proyección ---
+        // Radio de rotación de la cámara
+        float radius = 10.0f;
+        float camX = sin(glfwGetTime() * 0.5f) * radius;
+        float camZ = cos(glfwGetTime() * 0.5f) * radius;
+
+        glm::mat4 view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+        ourShader.setMat4("view", view);
+        ourShader.setMat4("projection", projection);
+
+        glBindVertexArray(VAO);
+
+        // Dibujar múltiples instancias de la figura
+        for(unsigned int i = 0; i < 10; i++)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            // Aplicar desplazamiento global (WASD) a cada objeto
+            glm::vec3 finalPos = objectPositions[i] + glm::vec3(posX, posY, 0.0f);
+            model = glm::translate(model, finalPos);
+
+            // #---------- animaciones ----------
+            // Animación: rotación basada en el tiempo y el índice
+            float angle = 20.0f * (i + 1) * (float)glfwGetTime();
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+            // Escala pulsante para efecto extra
+            float scale = 1.0f + 0.2f * sin((float)glfwGetTime() + i);
+            model = glm::scale(model, glm::vec3(scale));
+
+            ourShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 27);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();//muestran el frame y procesan eventos
@@ -212,45 +265,51 @@ static void processInput(GLFWwindow* window)
     float deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
-    float moveSpeed = 0.5f * deltaTime; // Velocidad ajustada con deltaTime
+    float moveSpeed = 2.5f * deltaTime; // Velocidad ajustada con deltaTime
 
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+    // #---------- teclas ----------
+    // Controles WASD para desplazamiento
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        posY += moveSpeed;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        posY -= moveSpeed;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         posX -= moveSpeed;
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         posX += moveSpeed;
 
-    static bool aPressed = false;
-    static bool dPressed = false;
-
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && !aPressed)
-    {
-        texSwap = !texSwap;
-        aPressed = true;
-        std::cout << "Texturas intercambiadas: " << (texSwap ? "SI" : "NO") << std::endl;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE)
-        aPressed = false;
-
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && !dPressed)
-    {
-        texSwap = !texSwap;
-        dPressed = true;
-        std::cout << "Texturas intercambiadas: " << (texSwap ? "SI" : "NO") << std::endl;
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE)
-        dPressed = false;
-
-    // Resetear posición
     static bool rPressed = false;
+    static bool lPressed = false;
+
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS && !rPressed)
     {
-        posX = 0.0f;
-        posY = 0.0f;
+        texSwap = !texSwap;
         rPressed = true;
-        std::cout << "Posicion reseteada a (0, 0)" << std::endl;
+        std::cout << "Texturas intercambiadas: " << (texSwap ? "SI" : "NO") << std::endl;
     }
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_RELEASE)
         rPressed = false;
+
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && !lPressed)
+    {
+        texSwap = !texSwap;
+        lPressed = true;
+        std::cout << "Texturas intercambiadas: " << (texSwap ? "SI" : "NO") << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_RELEASE)
+        lPressed = false;
+
+    // Resetear posición con ESPACIO
+    static bool spacePressed = false;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !spacePressed)
+    {
+        posX = 0.0f;
+        posY = 0.0f;
+        spacePressed = true;
+        std::cout << "Posicion reseteada a (0, 0)" << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+        spacePressed = false;
 }
 
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height)

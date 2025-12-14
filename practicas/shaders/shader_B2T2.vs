@@ -6,11 +6,13 @@ layout (location = 2) in float aGroupID;
 out vec2 TexCoord;
 out float GroupID;
 
-uniform vec2 positionOffset;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
-    gl_Position = vec4(aPos.x + positionOffset.x, aPos.y + positionOffset.y, aPos.z, 1.0);
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
     TexCoord = aTexCoord;
     GroupID = aGroupID;
 }
