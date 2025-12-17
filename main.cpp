@@ -41,6 +41,7 @@ void C2_Exercise_12_VP3D_Task1();
 void C2_Exercise_12_VP3D_Task2();
 void C2_Exercise_12_VP3D_Task3();
 void C2_Exercise_12_VP3D_Task4();
+void C3_Exercise_13_Colors_Task1();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
@@ -79,6 +80,7 @@ int main() {
     std::cout << "32. C2_Exercise_12_VP3D_Task2 - Vista de camara 3D con control de usuario" << std::endl;
     std::cout << "33. C2_Exercise_12_VP3D_Task3 - Vista de camara 3D con control de usuario avanzado" << std::endl;
     std::cout << "34. C2_Exercise_12_VP3D_Task4 - Vista de camara 3D con control de usuario y profundidad" << std::endl;
+    std::cout << "35. C3_Exercise_13_Colors_Task1 - Colores en 3D con iluminacion basica" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -165,7 +167,7 @@ int main() {
             C2_Exercise_11_T3D_Task2();//transformaciones 3D con texturas y animacion
             break;
         case 28:
-            C2_Exercise_11_T3D_Task3();//transformaciones 3D con texturas y animacion avanzada
+            C2_Exercise_11_T3D_Task3();//transformaciones 3D con texturas y animacion avanzada2
             break;
         case 29:
             C2_Exercise_11_T3D_Task4();//transformaciones 3D con texturas y animacion avanzada con profundidad
@@ -184,6 +186,9 @@ int main() {
             break;
         case 34:
             C2_Exercise_12_VP3D_Task4();//vista de camara 3D con control de usuario y profundidad
+            break;
+        case 35:
+            C3_Exercise_13_Colors_Task1();//colores en 3D con iluminacion basica
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
