@@ -81,143 +81,169 @@ void B2T3()
     Shader ourShader("../practicas/shaders/B2T3.vs", "../practicas/shaders/B2T3.fs");
 
     // ============================================================
-    // VERTICES DEL CUBO PARA EL PISO (textura pngwing.com.png)
-    // Coordenadas UV calculadas de la imagen del bloque de oro
-    // La cara frontal del cubo esta aproximadamente en:
-    // X: 0.25-0.50, Y: 0.33-0.66 (normalizado)
+    // VERTICES DEL CUBO COMPLETO PARA EL PISO (textura pngwing.com.png)
+    // Imagen desplegada de cubo de mineral - evitando bordes negros
+    // Se aplica un margen interno (padding) MAS AGRESIVO para no tomar las lineas negras
     // ============================================================
 
-    // UV para el piso (bloque de mineral) - usando una cara del cubo desplegado
-    // Cara central del cubo desplegado
-    float u1 = 0.25f, u2 = 0.50f;  // rango horizontal de una cara
-    float v1 = 0.33f, v2 = 0.66f;  // rango vertical de una cara
+    // Coordenadas UV para cada cara del cubo de mineral (con padding extra)
+    // Cara 1 (Arriba - TOP)
+    float topU1 = 0.30f, topU2 = 0.45f;
+    float topV1 = 0.78f, topV2 = 0.93f;
+
+    // Cara 2 (Frente - FRONT)
+    float frontU1 = 0.30f, frontU2 = 0.45f;
+    float frontV1 = 0.55f, frontV2 = 0.68f;
+
+    // Cara 3 (Izquierda - LEFT)
+    float leftU1 = 0.05f, leftU2 = 0.20f;
+    float leftV1 = 0.55f, leftV2 = 0.68f;
+
+    // Cara 4 (Derecha - RIGHT)
+    float rightU1 = 0.55f, rightU2 = 0.70f;
+    float rightV1 = 0.55f, rightV2 = 0.68f;
+
+    // Cara 5 (Atras - BACK)
+    float backU1 = 0.80f, backU2 = 0.95f;
+    float backV1 = 0.55f, backV2 = 0.68f;
+
+    // Cara 6 (Abajo - BOTTOM)
+    float bottomU1 = 0.30f, bottomU2 = 0.45f;
+    float bottomV1 = 0.30f, bottomV2 = 0.45f;
 
     float floorVertices[] = {
-        // positions          // texture coords (cara del bloque)
-        // Cara inferior (la que se ve desde arriba para el piso)
-        -0.5f, 0.0f, -0.5f,   u1, v2,
-         0.5f, 0.0f, -0.5f,   u2, v2,
-         0.5f, 0.0f,  0.5f,   u2, v1,
-         0.5f, 0.0f,  0.5f,   u2, v1,
-        -0.5f, 0.0f,  0.5f,   u1, v1,
-        -0.5f, 0.0f, -0.5f,   u1, v2,
+        // positions          // texture coords
+        // Cara superior (TOP) - visible desde arriba
+        -0.6f,  0.6f, -0.6f,  topU1, topV1,
+         0.4f,  0.4f, -0.4f,  topU2, topV1,
+         0.3f,  0.3f,  0.3f,  topU2, topV2,
+         0.5f,  0.5f,  0.5f,  topU2, topV2,
+        -0.5f,  0.5f,  0.5f,  topU1, topV2,
+        -0.5f,  0.5f, -0.6f,  topU1, topV1,
 
-        // Caras laterales del cubo de piso
-        // Frente
-        -0.5f, -0.5f,  0.5f,  u1, v2,
-         0.5f, -0.5f,  0.5f,  u2, v2,
-         0.5f,  0.0f,  0.5f,  u2, v1,
-         0.5f,  0.0f,  0.5f,  u2, v1,
-        -0.5f,  0.0f,  0.5f,  u1, v1,
-        -0.5f, -0.5f,  0.5f,  u1, v2,
-        // Atras
-        -0.5f, -0.5f, -0.5f,  u1, v2,
-         0.5f, -0.5f, -0.5f,  u2, v2,
-         0.5f,  0.0f, -0.5f,  u2, v1,
-         0.5f,  0.0f, -0.5f,  u2, v1,
-        -0.5f,  0.0f, -0.5f,  u1, v1,
-        -0.5f, -0.5f, -0.5f,  u1, v2,
-        // Izquierda
-        -0.5f, -0.5f, -0.5f,  u1, v2,
-        -0.5f, -0.5f,  0.5f,  u2, v2,
-        -0.5f,  0.0f,  0.5f,  u2, v1,
-        -0.5f,  0.0f,  0.5f,  u2, v1,
-        -0.5f,  0.0f, -0.5f,  u1, v1,
-        -0.5f, -0.5f, -0.5f,  u1, v2,
-        // Derecha
-         0.5f, -0.5f, -0.5f,  u1, v2,
-         0.5f, -0.5f,  0.5f,  u2, v2,
-         0.5f,  0.0f,  0.5f,  u2, v1,
-         0.5f,  0.0f,  0.5f,  u2, v1,
-         0.5f,  0.0f, -0.5f,  u1, v1,
-         0.5f, -0.5f, -0.5f,  u1, v2,
+        // Cara inferior (BOTTOM)
+        -0.5f, -0.5f, -0.5f,  bottomU1, bottomV2,
+         0.5f, -0.5f, -0.5f,  bottomU2, bottomV2,
+         0.5f, -0.5f,  0.5f,  bottomU2, bottomV1,
+         0.5f, -0.5f,  0.5f,  bottomU2, bottomV1,
+        -0.5f, -0.5f,  0.5f,  bottomU1, bottomV1,
+        -0.5f, -0.5f, -0.5f,  bottomU1, bottomV2,
+
+        // Cara frontal (FRONT)
+        -0.5f, -0.5f,  0.5f,  frontU1, frontV1,
+         0.5f, -0.5f,  0.5f,  frontU2, frontV1,
+         0.5f,  0.5f,  0.5f,  frontU2, frontV2,
+         0.5f,  0.5f,  0.5f,  frontU2, frontV2,
+        -0.5f,  0.5f,  0.5f,  frontU1, frontV2,
+        -0.5f, -0.5f,  0.5f,  frontU1, frontV1,
+
+        // Cara trasera (BACK)
+        -0.5f, -0.5f, -0.5f,  backU2, backV1,
+         0.5f, -0.5f, -0.5f,  backU1, backV1,
+         0.5f,  0.5f, -0.5f,  backU1, backV2,
+         0.5f,  0.5f, -0.5f,  backU1, backV2,
+        -0.5f,  0.5f, -0.5f,  backU2, backV2,
+        -0.5f, -0.5f, -0.5f,  backU2, backV1,
+
+        // Cara izquierda (LEFT)
+        -0.5f, -0.5f, -0.5f,  leftU1, leftV1,
+        -0.5f, -0.5f,  0.5f,  leftU2, leftV1,
+        -0.5f,  0.5f,  0.5f,  leftU2, leftV2,
+        -0.5f,  0.5f,  0.5f,  leftU2, leftV2,
+        -0.5f,  0.5f, -0.5f,  leftU1, leftV2,
+        -0.5f, -0.5f, -0.5f,  leftU1, leftV1,
+
+        // Cara derecha (RIGHT)
+         0.5f, -0.5f, -0.5f,  rightU2, rightV1,
+         0.5f, -0.5f,  0.5f,  rightU1, rightV1,
+         0.5f,  0.5f,  0.5f,  rightU1, rightV2,
+         0.5f,  0.5f,  0.5f,  rightU1, rightV2,
+         0.5f,  0.5f, -0.5f,  rightU2, rightV2,
+         0.5f, -0.5f, -0.5f,  rightU2, rightV1,
     };
 
     // ============================================================
     // VERTICES DEL CUBO PARA LA CABEZA DE FRY (Texture3.png)
     // Coordenadas UV calculadas del cubeecraft de Fry
-    // La cabeza esta en la seccion derecha de la imagen
-    // Imagen aproximada: 1200x927 pixels
-    // HEAD section aproximadamente:
-    // - Frente (cara): x=667-867, y=230-430 -> UV: 0.556-0.722, 0.536-0.752
-    // - Arriba (pelo): x=667-867, y=30-230 -> UV: 0.556-0.722, 0.752-0.968
-    // - Lados y atras calculados proporcionalmente
+    // Se aplica un margen interno (padding) para evitar las lineas negras de corte
     // ============================================================
 
-    // Coordenadas UV para cada cara de la cabeza de Fry
+    // Margen para recortar bordes negros (padding) - AUMENTADO
+    float pad = 0.035f;
+
     // Frente (cara con ojos)
-    float fU1 = 0.545f, fU2 = 0.725f;
-    float fV1 = 0.245f, fV2 = 0.465f;
+    float fU1 = 0.555f + pad, fU2 = 0.720f - pad;
+    float fV1 = 0.535f + pad, fV2 = 0.765f - pad;
 
     // Arriba (pelo naranja)
-    float tU1 = 0.545f, tU2 = 0.725f;
-    float tV1 = 0.025f, tV2 = 0.245f;
+    float tU1 = 0.555f + pad, tU2 = 0.720f - pad;
+    float tV1 = 0.765f + pad, tV2 = 0.995f - pad;
 
-    // Atras
-    float bU1 = 0.545f, bU2 = 0.725f;
-    float bV1 = 0.465f, bV2 = 0.685f;
+    // Abajo (cuello/barbilla)
+    float boU1 = 0.555f + pad, boU2 = 0.720f - pad;
+    float boV1 = 0.305f + pad, boV2 = 0.535f - pad;
 
-    // Izquierda (oreja izq)
-    float lU1 = 0.365f, lU2 = 0.545f;
-    float lV1 = 0.245f, lV2 = 0.465f;
+    // Izquierda (oreja izquierda)
+    float lU1 = 0.390f + pad, lU2 = 0.555f - pad;
+    float lV1 = 0.535f + pad, lV2 = 0.765f - pad;
 
-    // Derecha (oreja der)
-    float rU1 = 0.725f, rU2 = 0.905f;
-    float rV1 = 0.245f, rV2 = 0.465f;
+    // Derecha (oreja derecha)
+    float rU1 = 0.720f + pad, rU2 = 0.885f - pad;
+    float rV1 = 0.535f + pad, rV2 = 0.765f - pad;
 
-    // Abajo (cuello)
-    float boU1 = 0.545f, boU2 = 0.725f;
-    float boV1 = 0.685f, boV2 = 0.750f;
+    // Atras (parte trasera de la cabeza)
+    float bU1 = 0.555f + pad, bU2 = 0.720f - pad;
+    float bV1 = 0.075f + pad, bV2 = 0.305f - pad;
 
     float headVertices[] = {
         // positions          // texture coords
         // Cara trasera (atras de la cabeza)
-        -0.5f, -0.5f, -0.5f,  bU2, bV2,
-         0.5f, -0.5f, -0.5f,  bU1, bV2,
-         0.5f,  0.5f, -0.5f,  bU1, bV1,
-         0.5f,  0.5f, -0.5f,  bU1, bV1,
-        -0.5f,  0.5f, -0.5f,  bU2, bV1,
-        -0.5f, -0.5f, -0.5f,  bU2, bV2,
+        -0.5f, -0.5f, -0.5f,  bU2, bV1,
+         0.5f, -0.5f, -0.5f,  bU1, bV1,
+         0.5f,  0.5f, -0.5f,  bU1, bV2,
+         0.5f,  0.5f, -0.5f,  bU1, bV2,
+        -0.5f,  0.5f, -0.5f,  bU2, bV2,
+        -0.5f, -0.5f, -0.5f,  bU2, bV1,
 
         // Cara frontal (cara de Fry con ojos)
-        -0.5f, -0.5f,  0.5f,  fU1, fV2,
-         0.5f, -0.5f,  0.5f,  fU2, fV2,
-         0.5f,  0.5f,  0.5f,  fU2, fV1,
-         0.5f,  0.5f,  0.5f,  fU2, fV1,
-        -0.5f,  0.5f,  0.5f,  fU1, fV1,
-        -0.5f, -0.5f,  0.5f,  fU1, fV2,
+        -0.5f, -0.5f,  0.5f,  fU2, fV1,
+         0.5f, -0.5f,  0.5f,  fU1, fV1,
+         0.5f,  0.5f,  0.5f,  fU1, fV2,
+         0.5f,  0.5f,  0.5f,  fU1, fV2,
+        -0.5f,  0.5f,  0.5f,  fU2, fV2,
+        -0.5f, -0.5f,  0.5f,  fU2, fV1,
 
-        // Cara izquierda
-        -0.5f,  0.5f,  0.5f,  lU2, lV1,
-        -0.5f,  0.5f, -0.5f,  lU1, lV1,
-        -0.5f, -0.5f, -0.5f,  lU1, lV2,
-        -0.5f, -0.5f, -0.5f,  lU1, lV2,
-        -0.5f, -0.5f,  0.5f,  lU2, lV2,
-        -0.5f,  0.5f,  0.5f,  lU2, lV1,
+        // Cara izquierda (oreja izquierda)
+        -0.5f,  0.5f,  0.5f,  lU1, lV2,
+        -0.5f,  0.5f, -0.5f,  lU2, lV2,
+        -0.5f, -0.5f, -0.5f,  lU2, lV1,
+        -0.5f, -0.5f, -0.5f,  lU2, lV1,
+        -0.5f, -0.5f,  0.5f,  lU1, lV1,
+        -0.5f,  0.5f,  0.5f,  lU1, lV2,
 
-        // Cara derecha
-         0.5f,  0.5f,  0.5f,  rU1, rV1,
-         0.5f,  0.5f, -0.5f,  rU2, rV1,
-         0.5f, -0.5f, -0.5f,  rU2, rV2,
-         0.5f, -0.5f, -0.5f,  rU2, rV2,
-         0.5f, -0.5f,  0.5f,  rU1, rV2,
-         0.5f,  0.5f,  0.5f,  rU1, rV1,
+        // Cara derecha (oreja derecha)
+         0.5f,  0.5f,  0.5f,  rU2, rV2,
+         0.5f,  0.5f, -0.5f,  rU1, rV2,
+         0.5f, -0.5f, -0.5f,  rU1, rV1,
+         0.5f, -0.5f, -0.5f,  rU1, rV1,
+         0.5f, -0.5f,  0.5f,  rU2, rV1,
+         0.5f,  0.5f,  0.5f,  rU2, rV2,
 
         // Cara inferior (cuello/base)
-        -0.5f, -0.5f, -0.5f,  boU1, boV1,
-         0.5f, -0.5f, -0.5f,  boU2, boV1,
-         0.5f, -0.5f,  0.5f,  boU2, boV2,
-         0.5f, -0.5f,  0.5f,  boU2, boV2,
-        -0.5f, -0.5f,  0.5f,  boU1, boV2,
-        -0.5f, -0.5f, -0.5f,  boU1, boV1,
+        -0.5f, -0.5f, -0.5f,  boU2, boV2,
+         0.5f, -0.5f, -0.5f,  boU1, boV2,
+         0.5f, -0.5f,  0.5f,  boU1, boV1,
+         0.5f, -0.5f,  0.5f,  boU1, boV1,
+        -0.5f, -0.5f,  0.5f,  boU2, boV1,
+        -0.5f, -0.5f, -0.5f,  boU2, boV2,
 
         // Cara superior (pelo)
-        -0.5f,  0.5f, -0.5f,  tU1, tV1,
-         0.5f,  0.5f, -0.5f,  tU2, tV1,
-         0.5f,  0.5f,  0.5f,  tU2, tV2,
-         0.5f,  0.5f,  0.5f,  tU2, tV2,
-        -0.5f,  0.5f,  0.5f,  tU1, tV2,
-        -0.5f,  0.5f, -0.5f,  tU1, tV1,
+        -0.5f,  0.5f, -0.5f,  tU2, tV1,
+         0.5f,  0.5f, -0.5f,  tU1, tV1,
+         0.5f,  0.5f,  0.5f,  tU1, tV2,
+         0.5f,  0.5f,  0.5f,  tU1, tV2,
+        -0.5f,  0.5f,  0.5f,  tU2, tV2,
+        -0.5f,  0.5f, -0.5f,  tU2, tV1,
     };
 
     // ============================================================
@@ -357,9 +383,9 @@ void B2T3()
             for (int z = -FLOOR_SIZE/2; z < FLOOR_SIZE/2; z++)
             {
                 glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
+                model = glm::translate(model, glm::vec3((float)x, -0.5f, (float)z));
                 ourShader.setMat4("model", model);
-                glDrawArrays(GL_TRIANGLES, 0, 30);  // 5 caras * 6 vertices
+                glDrawArrays(GL_TRIANGLES, 0, 36);  // 6 caras * 6 vertices = cubo completo
             }
         }
 
@@ -370,10 +396,10 @@ void B2T3()
         glBindVertexArray(headVAO);
 
         glm::mat4 model = glm::mat4(1.0f);
-        // Posicionar la cabeza sobre el piso (y = 0.5 para que este encima)
+        // Posicionar la cabeza sobre el piso (y = 0.5 para que este encima del piso)
         model = glm::translate(model, glm::vec3(0.0f, 0.5f, 0.0f));
         ourShader.setMat4("model", model);
-        glDrawArrays(GL_TRIANGLES, 0, 36);  // 6 caras * 6 vertices
+        glDrawArrays(GL_TRIANGLES, 0, 36);  // 6 caras * 6 vertices = cubo completo
 
         // Swap buffers y poll events
         glfwSwapBuffers(window);
