@@ -88,38 +88,38 @@ void B2T3()
 
     // Coordenadas UV para cada cara del cubo de mineral (con padding extra)
     // Cara 1 (Arriba - TOP)
-    float topU1 = 0.30f, topU2 = 0.45f;
-    float topV1 = 0.78f, topV2 = 0.93f;
+    float topU1 = 0.32f, topU2 = 0.43f;
+    float topV1 = 0.80f, topV2 = 0.91f;
 
     // Cara 2 (Frente - FRONT)
-    float frontU1 = 0.30f, frontU2 = 0.45f;
-    float frontV1 = 0.55f, frontV2 = 0.68f;
+    float frontU1 = 0.32f, frontU2 = 0.43f;
+    float frontV1 = 0.57f, frontV2 = 0.66f;
 
     // Cara 3 (Izquierda - LEFT)
-    float leftU1 = 0.05f, leftU2 = 0.20f;
-    float leftV1 = 0.55f, leftV2 = 0.68f;
+    float leftU1 = 0.07f, leftU2 = 0.18f;
+    float leftV1 = 0.57f, leftV2 = 0.66f;
 
     // Cara 4 (Derecha - RIGHT)
-    float rightU1 = 0.55f, rightU2 = 0.70f;
-    float rightV1 = 0.55f, rightV2 = 0.68f;
+    float rightU1 = 0.57f, rightU2 = 0.68f;
+    float rightV1 = 0.57f, rightV2 = 0.66f;
 
     // Cara 5 (Atras - BACK)
-    float backU1 = 0.80f, backU2 = 0.95f;
-    float backV1 = 0.55f, backV2 = 0.68f;
+    float backU1 = 0.82f, backU2 = 0.93f;
+    float backV1 = 0.57f, backV2 = 0.66f;
 
     // Cara 6 (Abajo - BOTTOM)
-    float bottomU1 = 0.30f, bottomU2 = 0.45f;
-    float bottomV1 = 0.30f, bottomV2 = 0.45f;
+    float bottomU1 = 0.32f, bottomU2 = 0.43f;
+    float bottomV1 = 0.32f, bottomV2 = 0.43f;
 
     float floorVertices[] = {
         // positions          // texture coords
         // Cara superior (TOP) - visible desde arriba
-        -0.6f,  0.6f, -0.6f,  topU1, topV1,
-         0.4f,  0.4f, -0.4f,  topU2, topV1,
-         0.3f,  0.3f,  0.3f,  topU2, topV2,
+        -0.5f,  0.5f, -0.5f,  topU1, topV1,
+         0.5f,  0.5f, -0.5f,  topU2, topV1,
+         0.5f,  0.5f,  0.5f,  topU2, topV2,
          0.5f,  0.5f,  0.5f,  topU2, topV2,
         -0.5f,  0.5f,  0.5f,  topU1, topV2,
-        -0.5f,  0.5f, -0.6f,  topU1, topV1,
+        -0.5f,  0.5f, -0.5f,  topU1, topV1,
 
         // Cara inferior (BOTTOM)
         -0.5f, -0.5f, -0.5f,  bottomU1, bottomV2,
@@ -168,8 +168,8 @@ void B2T3()
     // Se aplica un margen interno (padding) para evitar las lineas negras de corte
     // ============================================================
 
-    // Margen para recortar bordes negros (padding) - AUMENTADO
-    float pad = 0.035f;
+    // Margen para recortar bordes negros (padding) - MUY AUMENTADO
+    float pad = 0.050f;  // 5% de margen interno
 
     // Frente (cara con ojos)
     float fU1 = 0.555f + pad, fU2 = 0.720f - pad;
