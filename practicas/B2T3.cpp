@@ -30,7 +30,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // Camara
-Camera camera(glm::vec3(0.0f, 2.0f, 8.0f));
+static Camera camera(glm::vec3(0.0f, 2.0f, 8.0f));
 static float lastX = SCR_WIDTH / 2.0f;
 static float lastY = SCR_HEIGHT / 2.0f;
 static bool firstMouse = true;
