@@ -64,7 +64,7 @@ void B2T3()
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader ourShader("../practicas/shaders/B2T3.vs", "../practicas/shaders/B2T3.fs");
+    Shader ourShader("../practicas/shaders/shader_B2T3.vs", "../practicas/shaders/shader_B2T3.fs");
 
     // ============================================================
     // COORDENADAS UV PARA EL PISO (pngwing.com.png - 1482x1173)
