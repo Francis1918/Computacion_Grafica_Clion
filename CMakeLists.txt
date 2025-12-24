@@ -9,6 +9,8 @@ include_directories(SYSTEM external/glfw/include)
 include_directories(SYSTEM external/glad/include)
 # GLM
 include_directories(SYSTEM external/glm)
+#KHR
+include_directories(SYSTEM external/KHR)
 # LearnOpenGL (bibliotecas de terceros)
 include_directories(SYSTEM external/learnopengl)
 add_executable(Computacion_Grafica_Clion main.cpp
