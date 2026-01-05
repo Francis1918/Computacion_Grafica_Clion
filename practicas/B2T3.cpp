@@ -1,6 +1,6 @@
 //
 // Francis Bravo 1726296815
-// Escena tipo Minecraft con piso y personaje (cabeza de Fry)
+// Escena tipo Minecraft con piso y personaje
 //
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -11,7 +11,6 @@
 
 #include "shader.h"
 #include "camera.h"
-
 #include "stb_image.h"
 
 #include <iostream>
@@ -19,7 +18,7 @@
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-static void processInput(GLFWwindow *window);
+static void processInput(GLFWwindow* window);
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -32,16 +31,54 @@ static bool firstMouse = true;
 static float deltaTime = 0.0f;
 static float lastFrame = 0.0f;
 
+static unsigned int LoadTexture2D(const char* path, bool flipY, bool clampToEdge, bool nearest, bool genMipmaps)
+{
+    unsigned int texID = 0;
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, clampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, clampToEdge ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+
+    if (nearest)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, genMipmaps ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, genMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    int width = 0, height = 0, nrChannels = 0;
+    stbi_set_flip_vertically_on_load(flipY);
+    unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
+    if (!data)
+    {
+        std::cout << "Failed to load texture: " << path << std::endl;
+        return texID;
+    }
+
+    GLenum format = GL_RGB;
+    if (nrChannels == 1) format = GL_RED;
+    else if (nrChannels == 3) format = GL_RGB;
+    else if (nrChannels == 4) format = GL_RGBA;
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, (GLint)format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    if (genMipmaps) glGenerateMipmap(GL_TEXTURE_2D);
+
+    stbi_image_free(data);
+    return texID;
+}
+
 void B2T3()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
 
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Francis Bravo 1726296815", NULL, NULL);
     if (window == NULL)
@@ -67,148 +104,155 @@ void B2T3()
     Shader ourShader("../practicas/shaders/shader_B2T3.vs", "../practicas/shaders/shader_B2T3.fs");
 
     // ============================================================
-    // COORDENADAS UV PARA EL PISO (pngwing.com.png - 1482x1173)
-    // Cara X central del cubo desplegado: x=370-617, y=370-617
+    // PISO: uv recortados del net (pngwing.com.png), ignorando pestañas negras
     // ============================================================
-    float floorU1 = 370.0f / 1482.0f;   // 0.2496
-    float floorU2 = 617.0f / 1482.0f;   // 0.4163
-    float floorV1 = 1.0f - (617.0f / 1173.0f);  // 0.4740 (invertido Y)
-    float floorV2 = 1.0f - (370.0f / 1173.0f);  // 0.6846
+    float topU1 = 0.51349528f, topU2 = 0.71187584f, topV1 = 0.63512361f, topV2 = 0.88576300f;
+    float leftU1 = 0.10391363f, leftU2 = 0.30229420f, leftV1 = 0.37595908f, leftV2 = 0.62745098f;
+    float backU1 = 0.30904184f, backU2 = 0.50674764f, backV1 = 0.37595908f, backV2 = 0.62745098f;
+    float frontU1 = 0.51349528f, frontU2 = 0.71187584f, frontV1 = 0.37595908f, frontV2 = 0.62745098f;
+    float rightU1 = 0.71862348f, rightU2 = 0.91632928f, rightV1 = 0.37595908f, rightV2 = 0.62745098f;
+    float bottomU1 = 0.51349528f, bottomU2 = 0.71187584f, bottomV1 = 0.11679454f, bottomV2 = 0.36743393f;
 
     float floorVertices[] = {
-        // Cara superior (visible desde arriba)
-        -0.5f, 0.0f, -0.5f,   floorU1, floorV1,
-         0.5f, 0.0f, -0.5f,   floorU2, floorV1,
-         0.5f, 0.0f,  0.5f,   floorU2, floorV2,
-         0.5f, 0.0f,  0.5f,   floorU2, floorV2,
-        -0.5f, 0.0f,  0.5f,   floorU1, floorV2,
-        -0.5f, 0.0f, -0.5f,   floorU1, floorV1,
+        // TOP
+        -0.5f, 0.0f, -0.5f,   topU1, topV1,
+         0.5f, 0.0f, -0.5f,   topU2, topV1,
+         0.5f, 0.0f,  0.5f,   topU2, topV2,
+         0.5f, 0.0f,  0.5f,   topU2, topV2,
+        -0.5f, 0.0f,  0.5f,   topU1, topV2,
+        -0.5f, 0.0f, -0.5f,   topU1, topV1,
 
-        // Cara frontal
-        -0.5f, -0.5f,  0.5f,  floorU1, floorV1,
-         0.5f, -0.5f,  0.5f,  floorU2, floorV1,
-         0.5f,  0.0f,  0.5f,  floorU2, floorV2,
-         0.5f,  0.0f,  0.5f,  floorU2, floorV2,
-        -0.5f,  0.0f,  0.5f,  floorU1, floorV2,
-        -0.5f, -0.5f,  0.5f,  floorU1, floorV1,
+        // FRONT
+        -0.5f, -0.5f,  0.5f,  frontU1, frontV1,
+         0.5f, -0.5f,  0.5f,  frontU2, frontV1,
+         0.5f,  0.0f,  0.5f,  frontU2, frontV2,
+         0.5f,  0.0f,  0.5f,  frontU2, frontV2,
+        -0.5f,  0.0f,  0.5f,  frontU1, frontV2,
+        -0.5f, -0.5f,  0.5f,  frontU1, frontV1,
 
-        // Cara trasera
-        -0.5f, -0.5f, -0.5f,  floorU2, floorV1,
-         0.5f, -0.5f, -0.5f,  floorU1, floorV1,
-         0.5f,  0.0f, -0.5f,  floorU1, floorV2,
-         0.5f,  0.0f, -0.5f,  floorU1, floorV2,
-        -0.5f,  0.0f, -0.5f,  floorU2, floorV2,
-        -0.5f, -0.5f, -0.5f,  floorU2, floorV1,
+        // BACK (invertir U para no espejo)
+        -0.5f, -0.5f, -0.5f,  backU2, backV1,
+         0.5f, -0.5f, -0.5f,  backU1, backV1,
+         0.5f,  0.0f, -0.5f,  backU1, backV2,
+         0.5f,  0.0f, -0.5f,  backU1, backV2,
+        -0.5f,  0.0f, -0.5f,  backU2, backV2,
+        -0.5f, -0.5f, -0.5f,  backU2, backV1,
 
-        // Cara izquierda
-        -0.5f, -0.5f, -0.5f,  floorU1, floorV1,
-        -0.5f, -0.5f,  0.5f,  floorU2, floorV1,
-        -0.5f,  0.0f,  0.5f,  floorU2, floorV2,
-        -0.5f,  0.0f,  0.5f,  floorU2, floorV2,
-        -0.5f,  0.0f, -0.5f,  floorU1, floorV2,
-        -0.5f, -0.5f, -0.5f,  floorU1, floorV1,
+        // LEFT
+        -0.5f, -0.5f, -0.5f,  leftU1, leftV1,
+        -0.5f, -0.5f,  0.5f,  leftU2, leftV1,
+        -0.5f,  0.0f,  0.5f,  leftU2, leftV2,
+        -0.5f,  0.0f,  0.5f,  leftU2, leftV2,
+        -0.5f,  0.0f, -0.5f,  leftU1, leftV2,
+        -0.5f, -0.5f, -0.5f,  leftU1, leftV1,
 
-        // Cara derecha
-         0.5f, -0.5f, -0.5f,  floorU2, floorV1,
-         0.5f, -0.5f,  0.5f,  floorU1, floorV1,
-         0.5f,  0.0f,  0.5f,  floorU1, floorV2,
-         0.5f,  0.0f,  0.5f,  floorU1, floorV2,
-         0.5f,  0.0f, -0.5f,  floorU2, floorV2,
-         0.5f, -0.5f, -0.5f,  floorU2, floorV1,
+        // RIGHT (invertir U para no espejo)
+         0.5f, -0.5f, -0.5f,  rightU2, rightV1,
+         0.5f, -0.5f,  0.5f,  rightU1, rightV1,
+         0.5f,  0.0f,  0.5f,  rightU1, rightV2,
+         0.5f,  0.0f,  0.5f,  rightU1, rightV2,
+         0.5f,  0.0f, -0.5f,  rightU2, rightV2,
+         0.5f, -0.5f, -0.5f,  rightU2, rightV1,
+
+        // BOTTOM
+        -0.5f, -0.5f, -0.5f,  bottomU1, bottomV1,
+         0.5f, -0.5f, -0.5f,  bottomU2, bottomV1,
+         0.5f, -0.5f,  0.5f,  bottomU2, bottomV2,
+         0.5f, -0.5f,  0.5f,  bottomU2, bottomV2,
+        -0.5f, -0.5f,  0.5f,  bottomU1, bottomV2,
+        -0.5f, -0.5f, -0.5f,  bottomU1, bottomV1,
     };
 
     // ============================================================
-    // COORDENADAS UV PARA LA CABEZA DE FRY (Texture3.png - 1320x1020)
-    // Seccion HEAD a la derecha de la imagen
+    // CABEZA DE FRY (Texture3.png) - UVs corregidos por bordes reales
+    //
+    // Importante:
+    // - stbi flipY = false, así que V=0 es ARRIBA y V=1 es ABAJO.
+    // - Se usan insets de 1px para evitar bleeding.
     // ============================================================
 
-    // Frente (cara con ojos): x=627-867, y=248-488
-    float fU1 = 627.0f / 1320.0f;   // 0.475
-    float fU2 = 867.0f / 1320.0f;   // 0.657
-    float fV1 = 1.0f - (488.0f / 1020.0f);  // 0.522
-    float fV2 = 1.0f - (248.0f / 1020.0f);  // 0.757
+    // Dimensiones: ajustar altura para que no estire la cara (rectángulo 242x169 aprox)
+    const float h_w = 0.42f;                          // half width
+    const float h_d = 0.42f;                          // half depth
+    const float h_h = h_w * (169.0f / 242.0f);        // half height (match panel aspect)
 
-    // Arriba (pelo naranja): x=627-867, y=88-248
-    float tU1 = 627.0f / 1320.0f;
-    float tU2 = 867.0f / 1320.0f;
-    float tV1 = 1.0f - (248.0f / 1020.0f);  // 0.757
-    float tV2 = 1.0f - (88.0f / 1020.0f);   // 0.914
+    // U boundaries (inset 1px), W=1320
+    const float u_back1  = 0.1810606061f; // (238+1)/1320
+    const float u_back2  = 0.3628787879f; // (480-1)/1320
+    const float u_left1  = 0.3643939394f; // (480+1)/1320
+    const float u_left2  = 0.5446969697f; // (720-1)/1320
+    const float u_front1 = 0.5462121212f; // (720+1)/1320
+    const float u_front2 = 0.7280303030f; // (962-1)/1320
+    const float u_right1 = 0.7295454545f; // (962+1)/1320
+    const float u_right2 = 0.9113636364f; // (1204-1)/1320
 
-    // Abajo (cuello): x=627-867, y=488-648
-    float boU1 = 627.0f / 1320.0f;
-    float boU2 = 867.0f / 1320.0f;
-    float boV1 = 1.0f - (648.0f / 1020.0f); // 0.365
-    float boV2 = 1.0f - (488.0f / 1020.0f); // 0.522
+    // V boundaries (inset 1px), H=1020
+    // Franja de la cara (donde están ojos) ~ y:[335..504]
+    const float v_face_top    = 0.3294117647f; // (335+1)/1020
+    const float v_face_bottom = 0.4931372549f; // (504-1)/1020
 
-    // Izquierda (oreja izq): x=467-627, y=248-488
-    float lU1 = 467.0f / 1320.0f;   // 0.354
-    float lU2 = 627.0f / 1320.0f;   // 0.475
-    float lV1 = 1.0f - (488.0f / 1020.0f);
-    float lV2 = 1.0f - (248.0f / 1020.0f);
+    // Top (cabello arriba del panel frontal) ~ y:[94..335]
+    const float v_top_top     = 0.0931372549f; // (94+1)/1020
+    const float v_top_bottom  = 0.3274509804f; // (335-1)/1020
 
-    // Derecha (oreja der): x=867-1027, y=248-488
-    float rU1 = 867.0f / 1320.0f;   // 0.657
-    float rU2 = 1027.0f / 1320.0f;  // 0.778
-    float rV1 = 1.0f - (488.0f / 1020.0f);
-    float rV2 = 1.0f - (248.0f / 1020.0f);
-
-    // Atras: x=1027-1187, y=248-488
-    float bU1 = 1027.0f / 1320.0f;  // 0.778
-    float bU2 = 1187.0f / 1320.0f;  // 0.899
-    float bV1 = 1.0f - (488.0f / 1020.0f);
-    float bV2 = 1.0f - (248.0f / 1020.0f);
+    // Bottom (zona debajo de la franja) ~ y:[504..745] (no suele verse)
+    const float v_bot_top     = 0.4950980392f; // (504+1)/1020
+    const float v_bot_bottom  = 0.7294117647f; // (745-1)/1020
 
     float headVertices[] = {
-        // Cara trasera (atras de la cabeza)
-        -0.5f, -0.5f, -0.5f,  bU2, bV1,
-         0.5f, -0.5f, -0.5f,  bU1, bV1,
-         0.5f,  0.5f, -0.5f,  bU1, bV2,
-         0.5f,  0.5f, -0.5f,  bU1, bV2,
-        -0.5f,  0.5f, -0.5f,  bU2, bV2,
-        -0.5f, -0.5f, -0.5f,  bU2, bV1,
+        // --- FRONT (Z+) ---
+        -h_w, -h_h,  h_d,  u_front1, v_face_bottom,
+         h_w, -h_h,  h_d,  u_front2, v_face_bottom,
+         h_w,  h_h,  h_d,  u_front2, v_face_top,
+         h_w,  h_h,  h_d,  u_front2, v_face_top,
+        -h_w,  h_h,  h_d,  u_front1, v_face_top,
+        -h_w, -h_h,  h_d,  u_front1, v_face_bottom,
 
-        // Cara frontal (cara de Fry con ojos)
-        -0.5f, -0.5f,  0.5f,  fU1, fV1,
-         0.5f, -0.5f,  0.5f,  fU2, fV1,
-         0.5f,  0.5f,  0.5f,  fU2, fV2,
-         0.5f,  0.5f,  0.5f,  fU2, fV2,
-        -0.5f,  0.5f,  0.5f,  fU1, fV2,
-        -0.5f, -0.5f,  0.5f,  fU1, fV1,
+        // --- RIGHT (X+) ---
+         h_w, -h_h, -h_d,  u_right2, v_face_bottom, // back
+         h_w, -h_h,  h_d,  u_right1, v_face_bottom, // front (seam with front)
+         h_w,  h_h,  h_d,  u_right1, v_face_top,
+         h_w,  h_h,  h_d,  u_right1, v_face_top,
+         h_w,  h_h, -h_d,  u_right2, v_face_top,    // back
+         h_w, -h_h, -h_d,  u_right2, v_face_bottom,
 
-        // Cara izquierda
-        -0.5f,  0.5f,  0.5f,  lU2, lV2,
-        -0.5f,  0.5f, -0.5f,  lU1, lV2,
-        -0.5f, -0.5f, -0.5f,  lU1, lV1,
-        -0.5f, -0.5f, -0.5f,  lU1, lV1,
-        -0.5f, -0.5f,  0.5f,  lU2, lV1,
-        -0.5f,  0.5f,  0.5f,  lU2, lV2,
+        // --- LEFT (X-) ---
+        -h_w, -h_h, -h_d,  u_left1,  v_face_bottom, // back
+        -h_w, -h_h,  h_d,  u_left2,  v_face_bottom, // front (seam with front)
+        -h_w,  h_h,  h_d,  u_left2,  v_face_top,
+        -h_w,  h_h,  h_d,  u_left2,  v_face_top,
+        -h_w,  h_h, -h_d,  u_left1,  v_face_top,    // back
+        -h_w, -h_h, -h_d,  u_left1,  v_face_bottom,
 
-        // Cara derecha
-         0.5f,  0.5f,  0.5f,  rU1, rV2,
-         0.5f,  0.5f, -0.5f,  rU2, rV2,
-         0.5f, -0.5f, -0.5f,  rU2, rV1,
-         0.5f, -0.5f, -0.5f,  rU2, rV1,
-         0.5f, -0.5f,  0.5f,  rU1, rV1,
-         0.5f,  0.5f,  0.5f,  rU1, rV2,
+        // --- TOP (Y+) ---
+        // z=-h_d usa v_top_top (más arriba), z=+h_d usa v_top_bottom (borde con la cara)
+        -h_w,  h_h, -h_d,  u_front1, v_top_top,
+         h_w,  h_h, -h_d,  u_front2, v_top_top,
+         h_w,  h_h,  h_d,  u_front2, v_top_bottom,
+         h_w,  h_h,  h_d,  u_front2, v_top_bottom,
+        -h_w,  h_h,  h_d,  u_front1, v_top_bottom,
+        -h_w,  h_h, -h_d,  u_front1, v_top_top,
 
-        // Cara inferior (cuello)
-        -0.5f, -0.5f, -0.5f,  boU1, boV2,
-         0.5f, -0.5f, -0.5f,  boU2, boV2,
-         0.5f, -0.5f,  0.5f,  boU2, boV1,
-         0.5f, -0.5f,  0.5f,  boU2, boV1,
-        -0.5f, -0.5f,  0.5f,  boU1, boV1,
-        -0.5f, -0.5f, -0.5f,  boU1, boV2,
+        // --- BOTTOM (Y-) ---
+        // z=+h_d usa v_bot_top (borde con la cara), z=-h_d usa v_bot_bottom
+        -h_w, -h_h, -h_d,  u_front1, v_bot_bottom,
+         h_w, -h_h, -h_d,  u_front2, v_bot_bottom,
+         h_w, -h_h,  h_d,  u_front2, v_bot_top,
+         h_w, -h_h,  h_d,  u_front2, v_bot_top,
+        -h_w, -h_h,  h_d,  u_front1, v_bot_top,
+        -h_w, -h_h, -h_d,  u_front1, v_bot_bottom,
 
-        // Cara superior (pelo)
-        -0.5f,  0.5f, -0.5f,  tU1, tV1,
-         0.5f,  0.5f, -0.5f,  tU2, tV1,
-         0.5f,  0.5f,  0.5f,  tU2, tV2,
-         0.5f,  0.5f,  0.5f,  tU2, tV2,
-        -0.5f,  0.5f,  0.5f,  tU1, tV2,
-        -0.5f,  0.5f, -0.5f,  tU1, tV1,
+        // --- BACK (Z-) ---
+        // invertir U para que no quede espejado y para continuidad con el net
+        -h_w, -h_h, -h_d,  u_back2,  v_face_bottom, // left edge uses right edge of back panel
+         h_w, -h_h, -h_d,  u_back1,  v_face_bottom,
+         h_w,  h_h, -h_d,  u_back1,  v_face_top,
+         h_w,  h_h, -h_d,  u_back1,  v_face_top,
+        -h_w,  h_h, -h_d,  u_back2,  v_face_top,
+        -h_w, -h_h, -h_d,  u_back2,  v_face_bottom,
     };
 
-    // VAO/VBO para el piso
+    // VAO/VBO piso
     unsigned int floorVAO, floorVBO;
     glGenVertexArrays(1, &floorVAO);
     glGenBuffers(1, &floorVBO);
@@ -220,7 +264,7 @@ void B2T3()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // VAO/VBO para la cabeza
+    // VAO/VBO cabeza
     unsigned int headVAO, headVBO;
     glGenVertexArrays(1, &headVAO);
     glGenBuffers(1, &headVBO);
@@ -232,56 +276,18 @@ void B2T3()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // Cargar textura del piso
-    unsigned int textureFloor;
-    glGenTextures(1, &textureFloor);
-    glBindTexture(GL_TEXTURE_2D, textureFloor);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // Texturas
+    // Piso: clamp + nearest + sin mipmaps
+    unsigned int textureFloor = LoadTexture2D("../practicas/textures/pngwing.com.png", false, true, true, false);
 
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load("../practicas/textures/pngwing.com.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load floor texture" << std::endl;
-    }
-    stbi_image_free(data);
-
-    // Cargar textura de la cabeza
-    unsigned int textureHead;
-    glGenTextures(1, &textureHead);
-    glBindTexture(GL_TEXTURE_2D, textureHead);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    data = stbi_load("../practicas/textures/Texture3.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load head texture" << std::endl;
-    }
-    stbi_image_free(data);
+    // Cabeza: clamp + nearest + sin mipmaps (crisp, sin bleeding)
+    unsigned int textureHead  = LoadTexture2D("../practicas/textures/Texture3.png", false, true, true, false);
 
     ourShader.use();
     ourShader.setInt("texture1", 0);
 
     const int FLOOR_SIZE = 10;
 
-    // Render loop
     while (!glfwWindowShouldClose(window))
     {
         float currentFrame = glfwGetTime();
@@ -296,35 +302,36 @@ void B2T3()
         ourShader.use();
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
-                                                (float)SCR_WIDTH / (float)SCR_HEIGHT,
-                                                0.1f, 100.0f);
+            (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         ourShader.setMat4("projection", projection);
 
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("view", view);
 
-        // Dibujar piso
+        // Piso
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureFloor);
         glBindVertexArray(floorVAO);
 
-        for (int x = -FLOOR_SIZE/2; x < FLOOR_SIZE/2; x++)
+        for (int x = -FLOOR_SIZE / 2; x < FLOOR_SIZE / 2; x++)
         {
-            for (int z = -FLOOR_SIZE/2; z < FLOOR_SIZE/2; z++)
+            for (int z = -FLOOR_SIZE / 2; z < FLOOR_SIZE / 2; z++)
             {
                 glm::mat4 model = glm::mat4(1.0f);
                 model = glm::translate(model, glm::vec3((float)x, 0.0f, (float)z));
                 ourShader.setMat4("model", model);
-                glDrawArrays(GL_TRIANGLES, 0, 30);
+                glDrawArrays(GL_TRIANGLES, 0, 36);
             }
         }
 
-        // Dibujar cabeza de Fry
+        // Cabeza
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureHead);
         glBindVertexArray(headVAO);
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.5f, 0.0f));
+        // colocar la base de la cabeza justo sobre el piso: translate Y = h_h
+        model = glm::translate(model, glm::vec3(0.0f, h_h, 0.0f));
         ourShader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -341,7 +348,7 @@ void B2T3()
     return;
 }
 
-static void processInput(GLFWwindow *window)
+static void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
@@ -365,20 +372,21 @@ static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
     if (firstMouse)
     {
-        lastX = xpos;
-        lastY = ypos;
+        lastX = (float)xpos;
+        lastY = (float)ypos;
         firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
-    lastX = xpos;
-    lastY = ypos;
+    float xoffset = (float)xpos - lastX;
+    float yoffset = lastY - (float)ypos;
+    lastX = (float)xpos;
+    lastY = (float)ypos;
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    camera.ProcessMouseScroll(yoffset);
+    (void)xoffset;
+    camera.ProcessMouseScroll((float)yoffset);
 }
