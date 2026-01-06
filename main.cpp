@@ -50,6 +50,7 @@ void C3_Exercise_14_MatLMap_Task1();
 void C3_Exercise_14_MatLMap_Task2();
 void C3_Exercise_14_MatLMap_Task3();
 void C3_Exercise_14_MatLMap_Task4();
+void B2T4();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
@@ -97,6 +98,7 @@ int main() {
     std::cout << "41. C3_Exercise_14_MatLMap_Task2 - Mapeo de materiales y luces (Task 2)" << std::endl;
     std::cout << "42. C3_Exercise_14_MatLMap_Task3 - Mapeo de materiales y luces (Task 3)" << std::endl;
     std::cout << "43. C3_Exercise_14_MatLMap_Task4 - Mapeo de materiales y luces (Task 4)" << std::endl;
+    std::cout << "44. B2T4 - Iluminacion basica con Phong" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -229,6 +231,9 @@ int main() {
             break;
         case 43:
             C3_Exercise_14_MatLMap_Task4();//mapeo de materiales y luces (Task 4)
+            break;
+        case 44:
+            B2T4();//iluminacion basica con Phong
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
