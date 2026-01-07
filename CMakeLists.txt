@@ -65,5 +65,12 @@ add_executable(Computacion_Grafica_Clion main.cpp
         practicas/C3_Exercise_14_MatLMap_Task2.cpp
         practicas/C3_Exercise_14_MatLMap_Task3.cpp
         practicas/C3_Exercise_14_MatLMap_Task4.cpp
-        practicas/B2T4.cpp)
+        practicas/B2T4.cpp
+        practicas/B2T4v2.cpp
+        practicas/C3_Exercise_15_LCaster_Task1.cpp
+        practicas/C3_Exercise_15_LCaster_Task2.cpp
+        practicas/C3_Exercise_15_LCaster_Task3.cpp
+        practicas/C3_Exercise_15_LCaster_Task5_plus.cpp
+        practicas/C3_Exercise_15_LCaster_Task5.cpp
+        practicas/C3_Exercise_15_LCaster_Task4.cpp)
 target_link_libraries(Computacion_Grafica_Clion glfw opengl32)

@@ -51,6 +51,13 @@ void C3_Exercise_14_MatLMap_Task2();
 void C3_Exercise_14_MatLMap_Task3();
 void C3_Exercise_14_MatLMap_Task4();
 void B2T4();
+void B2T4v2();
+void C3_Exercise_15_LCaster_Task1();
+void C3_Exercise_15_LCaster_Task2();
+void C3_Exercise_15_LCaster_Task3();
+void C3_Exercise_15_LCaster_Task4();
+void C3_Exercise_15_LCaster_Task5();
+void C3_Exercise_15_LCaster_Task5_plus();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
@@ -99,6 +106,13 @@ int main() {
     std::cout << "42. C3_Exercise_14_MatLMap_Task3 - Mapeo de materiales y luces (Task 3)" << std::endl;
     std::cout << "43. C3_Exercise_14_MatLMap_Task4 - Mapeo de materiales y luces (Task 4)" << std::endl;
     std::cout << "44. B2T4 - Iluminacion basica con Phong" << std::endl;
+    std::cout << "45. B2T4v2 - Iluminacion basica con Phong (version 2)" << std::endl;
+    std::cout << "46. C3_Exercise_15_LCaster_Task1 - Light Caster (Task 1)" << std::endl;
+    std::cout << "47. C3_Exercise_15_LCaster_Task2 - Light Caster (Task 2)" << std::endl;
+    std::cout << "48. C3_Exercise_15_LCaster_Task3 - Light Caster (Task 3)" << std::endl;
+    std::cout << "49. C3_Exercise_15_LCaster_Task4 - Light Caster (Task 4)" << std::endl;
+    std::cout << "50. C3_Exercise_15_LCaster_Task5 - Light Caster (Task 5)" << std::endl;
+    std::cout << "51. C3_Exercise_15_LCaster_Task5_plus - Light Caster (Task 5 plus)" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -234,6 +248,27 @@ int main() {
             break;
         case 44:
             B2T4();//iluminacion basica con Phong
+            break;
+        case 45:
+            B2T4v2();//iluminacion basica con Phong (version 2)
+            break;
+        case 46:
+            C3_Exercise_15_LCaster_Task1();//Light Caster (Task 1)
+            break;
+        case 47:
+            C3_Exercise_15_LCaster_Task2();//Light Caster (Task 2)
+            break;
+        case 48:
+            C3_Exercise_15_LCaster_Task3();//Light Caster (Task 3)
+            break;
+        case 49:
+            C3_Exercise_15_LCaster_Task4();//Light Caster (Task 4)
+            break;
+        case 50:
+            C3_Exercise_15_LCaster_Task5();//Light Caster (Task 5)
+            break;
+        case 51:
+            //C3_Exercise_15_LCaster_Task5_plus();//Light Caster (Task 5 plus)
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
