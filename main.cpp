@@ -268,7 +268,7 @@ int main() {
             C3_Exercise_15_LCaster_Task5();//Light Caster (Task 5)
             break;
         case 51:
-            //C3_Exercise_15_LCaster_Task5_plus();//Light Caster (Task 5 plus)
+            C3_Exercise_15_LCaster_Task5_plus();//Light Caster (Task 5 plus)
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
