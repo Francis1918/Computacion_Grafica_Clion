@@ -72,5 +72,6 @@ add_executable(Computacion_Grafica_Clion main.cpp
         practicas/C3_Exercise_15_LCaster_Task3.cpp
         practicas/C3_Exercise_15_LCaster_Task5_plus.cpp
         practicas/C3_Exercise_15_LCaster_Task5.cpp
-        practicas/C3_Exercise_15_LCaster_Task4.cpp)
+        practicas/C3_Exercise_15_LCaster_Task4.cpp
+        practicas/Proyectopruebatexture.cpp)
 target_link_libraries(Computacion_Grafica_Clion glfw opengl32)

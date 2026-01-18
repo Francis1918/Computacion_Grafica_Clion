@@ -58,6 +58,7 @@ void C3_Exercise_15_LCaster_Task3();
 void C3_Exercise_15_LCaster_Task4();
 void C3_Exercise_15_LCaster_Task5();
 void C3_Exercise_15_LCaster_Task5_plus();
+void game();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
@@ -113,6 +114,7 @@ int main() {
     std::cout << "49. C3_Exercise_15_LCaster_Task4 - Light Caster (Task 4)" << std::endl;
     std::cout << "50. C3_Exercise_15_LCaster_Task5 - Light Caster (Task 5)" << std::endl;
     std::cout << "51. C3_Exercise_15_LCaster_Task5_plus - Light Caster (Task 5 plus)" << std::endl;
+    std::cout << "52. Game - Juego" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -269,6 +271,9 @@ int main() {
             break;
         case 51:
             C3_Exercise_15_LCaster_Task5_plus();//Light Caster (Task 5 plus)
+            break;
+        case 52:
+            game();//juego
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
