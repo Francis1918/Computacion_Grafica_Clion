@@ -12,7 +12,13 @@ include_directories(SYSTEM external/glm)
 #KHR
 include_directories(SYSTEM external/KHR)
 # Assimp
-include_directories(SYSTEM external/assimp/include)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/assimp-6.0.3)
+include_directories(SYSTEM external/assimp-6.0.3/include)
+include_directories(SYSTEM ${CMAKE_CURRENT_BINARY_DIR}/external/assimp-6.0.3/include)
 # LearnOpenGL (bibliotecas de terceros)
 include_directories(SYSTEM external/learnopengl)
 add_executable(Computacion_Grafica_Clion main.cpp
@@ -75,5 +81,6 @@ add_executable(Computacion_Grafica_Clion main.cpp
         practicas/C3_Exercise_15_LCaster_Task5_plus.cpp
         practicas/C3_Exercise_15_LCaster_Task5.cpp
         practicas/C3_Exercise_15_LCaster_Task4.cpp
-        practicas/Proyectopruebatexture.cpp)
-target_link_libraries(Computacion_Grafica_Clion glfw opengl32)
+        practicas/Proyectopruebatexture.cpp
+        practicas/test_assimp.cpp)
+target_link_libraries(Computacion_Grafica_Clion glfw opengl32 assimp)

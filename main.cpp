@@ -59,6 +59,7 @@ void C3_Exercise_15_LCaster_Task4();
 void C3_Exercise_15_LCaster_Task5();
 void C3_Exercise_15_LCaster_Task5_plus();
 void game();
+void test_assimp();
 int main() {
     int opcion;
     // Mostrar menú detallado para que el usuario sepa qué está eligiendo
@@ -115,6 +116,7 @@ int main() {
     std::cout << "50. C3_Exercise_15_LCaster_Task5 - Light Caster (Task 5)" << std::endl;
     std::cout << "51. C3_Exercise_15_LCaster_Task5_plus - Light Caster (Task 5 plus)" << std::endl;
     std::cout << "52. Game - Juego" << std::endl;
+    std::cout << "53. Test Assimp - Probar libreria Assimp" << std::endl;
     std::cout << "0. Salir" << std::endl;
     std::cout << "Elige la practica que deseas ejecutar: ";
     std::cin >> opcion;
@@ -274,6 +276,9 @@ int main() {
             break;
         case 52:
             game();//juego
+            break;
+        case 53:
+            test_assimp();
             break;
         case 0:
             std::cout << "Saliendo..." << std::endl;
