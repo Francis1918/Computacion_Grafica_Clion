@@ -11,6 +11,8 @@ include_directories(SYSTEM external/glad/include)
 include_directories(SYSTEM external/glm)
 #KHR
 include_directories(SYSTEM external/KHR)
+# Assimp
+include_directories(SYSTEM external/assimp/include)
 # LearnOpenGL (bibliotecas de terceros)
 include_directories(SYSTEM external/learnopengl)
 add_executable(Computacion_Grafica_Clion main.cpp
